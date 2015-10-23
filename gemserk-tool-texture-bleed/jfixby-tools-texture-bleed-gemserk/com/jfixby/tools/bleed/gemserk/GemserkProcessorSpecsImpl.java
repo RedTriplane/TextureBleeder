@@ -17,4 +17,28 @@ public class GemserkProcessorSpecsImpl implements TextureBleedSpecs {
 		folder = input_folder;
 	}
 
+	@Override
+	public boolean getDebugMode() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setDebugMode(boolean flag) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getMaxScans() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setMaxScans(int maxScans) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
