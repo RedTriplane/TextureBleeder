@@ -47,7 +47,7 @@ public class TestRebeccaTextureBleeder {
 
 		TextureBleedSpecs bleedSpecs = TextureBleed.newSpecs();
 		bleedSpecs.setDebugMode(true);
-		bleedSpecs.setMaxScans(-1);
+		bleedSpecs.setMaxScans(Integer.MAX_VALUE);
 		File examples_folder = LocalFileSystem.ApplicationHome().child(
 				"examples");
 		File tmp_folder = LocalFileSystem.ApplicationHome().child("tmp");
