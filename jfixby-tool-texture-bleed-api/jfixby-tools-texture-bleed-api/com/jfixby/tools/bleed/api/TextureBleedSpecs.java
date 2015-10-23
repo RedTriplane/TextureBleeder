@@ -8,4 +8,12 @@ public interface TextureBleedSpecs {
 
 	void setInputFolder(File input_folder);
 
+	boolean getDebugMode();
+
+	void setDebugMode(boolean flag);
+
+	int getMaxScans();
+
+	void setMaxScans(int maxScans);
+
 }
