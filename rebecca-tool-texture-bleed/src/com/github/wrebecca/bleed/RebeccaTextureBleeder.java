@@ -17,6 +17,7 @@ import com.jfixby.cmns.api.io.IO;
 import com.jfixby.cmns.api.math.Int2;
 import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.path.ChildrenList;
+import com.jfixby.cmns.api.sys.Sys;
 import com.jfixby.tools.bleed.api.TextureBleedComponent;
 import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
@@ -129,14 +130,26 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			}
 		}
 		int k = 1;
+		long timer_start = Sys.SystemTime().currentTimeMillis();
+		long timer = 0;
+		long DELTA = 100;
 		for (; border.size() > 0; k++) {
 			if (k >= maxScans) {
 				break;
 			}
-			// System.out.print('.');
+			long current = Sys.SystemTime().currentTimeMillis();
+			long delta = current - timer_start;
+
+			timer_start = current;
+			timer = timer + delta;
+			while (timer > DELTA) {
+				System.out.print('.');
+				timer = timer - DELTA;
+			}
+			//
 			border = scan(function, k, img, border);
 		}
-		// System.out.println();
+		System.out.println();
 		// System.out.println("Scans performed: " + k);
 		fileResult.setScansPerformed(k);
 		// int maxDistance = colors.size();
