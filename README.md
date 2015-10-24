@@ -1,6 +1,5 @@
 # TextureBleeder
-The tool properly bleeds the colors of the non-transparent pixels into the transparent ones to avoid sprite bleeding.
-(ablut sprite bleeding: http://jfix.by/2013/02/23/opengl-filters/)
+This tool solves spritesheet and texture bleeding (more about the topic: http://jfix.by/2013/02/23/opengl-filters/)
 + `jfixby-tool-texture-bleed-api` — color bleeding removal API
 + `rebecca-tool-texture-bleed` — super-fast free open-source implementation by Rebecca Wilson (https://github.com/wrebecca)
 - `gemserk-tool-texture-bleed` — Gemserk implementation for the color bleeding removal WARNING! Missing code license, see: https://github.com/JFixby/TextureBleeder/issues/2 (source: https://github.com/gemserk/imageprocessing)
