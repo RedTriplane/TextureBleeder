@@ -1,5 +1,6 @@
 # TextureBleeder
-This tool solves spritesheet and texture bleeding
+This tool resolves spritesheet and texture bleeding.
+
 (more about the topic: http://jfix.by/2013/02/23/opengl-filters/)
 + `jfixby-tool-texture-bleed-api` — color bleeding removal API
 + `rebecca-tool-texture-bleed` — super-fast free open-source implementation by Rebecca Wilson (https://github.com/wrebecca)
