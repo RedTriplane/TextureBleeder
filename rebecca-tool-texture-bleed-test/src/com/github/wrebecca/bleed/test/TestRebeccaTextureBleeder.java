@@ -27,6 +27,7 @@ import com.jfixby.red.desktop.sys.DesktopSystem;
 import com.jfixby.red.io.RedIO;
 import com.jfixby.red.util.md5.AlpaeroMD5;
 import com.jfixby.tools.bleed.api.TextureBleed;
+import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
 
 public class TestRebeccaTextureBleeder {
@@ -47,7 +48,7 @@ public class TestRebeccaTextureBleeder {
 
 		TextureBleedSpecs bleedSpecs = TextureBleed.newSpecs();
 		bleedSpecs.setDebugMode(true);
-		bleedSpecs.setMaxScans(Integer.MAX_VALUE);
+		// bleedSpecs.setMaxScans(Integer.MAX_VALUE);
 		File examples_folder = LocalFileSystem.ApplicationHome().child(
 				"examples");
 		File tmp_folder = LocalFileSystem.ApplicationHome().child("tmp");
@@ -55,7 +56,8 @@ public class TestRebeccaTextureBleeder {
 
 		LocalFileSystem.copyFolderContentsToFolder(examples_folder, tmp_folder);
 
-		TextureBleed.process(bleedSpecs);
+		TextureBleedResult result = TextureBleed.process(bleedSpecs);
+		result.print();
 
 	}
 

@@ -26,8 +26,8 @@ public class TextureBleed {
 		return invoke().newGemserkProcessorSpecs();
 	}
 
-	public static void process(TextureBleedSpecs specs) throws IOException {
-		invoke().process(specs);
+	public static TextureBleedResult process(TextureBleedSpecs specs) throws IOException {
+		return invoke().process(specs);
 	}
 
 }

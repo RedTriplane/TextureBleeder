@@ -18,11 +18,12 @@ import com.jfixby.cmns.api.math.Int2;
 import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.path.ChildrenList;
 import com.jfixby.tools.bleed.api.TextureBleedComponent;
+import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
 
 /**
  * 
- * @author WRebecca
+ * @author WRebecca (https://github.com/WRebecca)
  * 
  *         This is free and unencumbered software released into the public
  *         domain.
@@ -65,7 +66,10 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 	}
 
 	@Override
-	public void process(TextureBleedSpecs specs) throws IOException {
+	public TextureBleedResult process(TextureBleedSpecs specs)
+			throws IOException {
+		TextureBleedResultImpl result = new TextureBleedResultImpl();
+
 		File folder = specs.getInputFolder();
 		ChildrenList pngFiles = folder.listChildren().filter(n -> {
 			return n.getName().toLowerCase().endsWith(".png");
@@ -78,18 +82,25 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 
 		maxScans = specs.getMaxScans();
 		if (maxScans < 0) {
-			maxScans = 32;
+			maxScans = 4;
 		}
 
 		System.out.println("maxScans: " + maxScans);
 
 		for (File png : pngFiles) {
-			process(png);
+			process(png, result);
 		}
+
+		return result;
 
 	}
 
-	private void process(File png) throws IOException {
+	private void process(File png, TextureBleedResultImpl result)
+			throws IOException {
+		FileResultImpl fileResult = new FileResultImpl();
+		fileResult.setProcessedFile(png);
+		long start_time = System.currentTimeMillis();
+		result.addFileResult(fileResult);
 		System.out.println("Processing: " + png);
 		FileInputStream is = png.newInputStream();
 		Buffer buffer = IO.readStreamToBuffer(is);
@@ -117,16 +128,17 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 
 			}
 		}
-		int k = 0;
+		int k = 1;
 		for (; border.size() > 0; k++) {
 			if (k >= maxScans) {
 				break;
 			}
-			System.out.print('.');
+			// System.out.print('.');
 			border = scan(function, k, img, border);
 		}
-		System.out.println();
-		System.out.println("Scans performed: " + k);
+		// System.out.println();
+		// System.out.println("Scans performed: " + k);
+		fileResult.setScansPerformed(k);
 		// int maxDistance = colors.size();
 		for (int x = 0; x < W; x++) {
 			for (int y = 0; y < H; y++) {
@@ -140,7 +152,8 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		}
 		image = img.toJavaImage();
 		ImageProcessing.writeJavaFile(image, png, "png");
-
+		long mills = System.currentTimeMillis() - start_time;
+		fileResult.setDoneInMills(mills);
 	}
 
 	private boolean hasNonTransparentNeighbour(int x0, int y0, ColorFunction img) {

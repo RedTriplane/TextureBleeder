@@ -6,6 +6,6 @@ public interface TextureBleedComponent {
 
 	TextureBleedSpecs newGemserkProcessorSpecs();
 
-	void process(TextureBleedSpecs specs) throws IOException;
+	TextureBleedResult process(TextureBleedSpecs specs) throws IOException;
 
 }
