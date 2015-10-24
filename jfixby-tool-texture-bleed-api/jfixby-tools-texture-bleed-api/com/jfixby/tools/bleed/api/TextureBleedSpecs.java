@@ -4,6 +4,8 @@ import com.jfixby.cmns.api.filesystem.File;
 
 public interface TextureBleedSpecs {
 
+	public static final int DEFAULT_PADDING = 16;
+
 	File getInputFolder();
 
 	void setInputFolder(File input_folder);
@@ -12,8 +14,8 @@ public interface TextureBleedSpecs {
 
 	void setDebugMode(boolean flag);
 
-	int getMaxScans();
+	int getPaddingSize();
 
-	void setMaxScans(int maxScans);
+	void setPaddingSize(int maxScans);
 
 }

@@ -81,9 +81,9 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			this.ALPHA = this.DEBUG_MODE_ALPHA;
 		}
 
-		maxScans = specs.getMaxScans();
+		maxScans = specs.getPaddingSize();
 		if (maxScans < 0) {
-			maxScans = 4;
+			maxScans = TextureBleedSpecs.DEFAULT_PADDING;
 		}
 
 		System.out.println("maxScans: " + maxScans);

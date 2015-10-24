@@ -35,13 +35,13 @@ public class TextureBleedSpecsImpl implements TextureBleedSpecs {
 	}
 
 	@Override
-	public int getMaxScans() {
+	public int getPaddingSize() {
 		// TODO Auto-generated method stub
 		return maxScans;
 	}
 
 	@Override
-	public void setMaxScans(int maxScans) {
+	public void setPaddingSize(int maxScans) {
 		// TODO Auto-generated method stub
 		this.maxScans = maxScans;
 
