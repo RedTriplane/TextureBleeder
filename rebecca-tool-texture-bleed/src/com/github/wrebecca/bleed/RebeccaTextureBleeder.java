@@ -9,7 +9,7 @@ import com.jfixby.cmns.api.collections.ZxZ_Functuion;
 import com.jfixby.cmns.api.color.Color;
 import com.jfixby.cmns.api.color.Colors;
 import com.jfixby.cmns.api.filesystem.File;
-import com.jfixby.cmns.api.image.ColorMap;
+import com.jfixby.cmns.api.image.EditableColorMap;
 import com.jfixby.cmns.api.math.Int2;
 import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.path.ChildrenList;
@@ -99,7 +99,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		result.addFileResult(fileResult);
 		System.out.println("Processing: " + png);
 		BufferedImage image = ImageGWT.readFromFile(png);
-		ColorMap img = ImageGWT.newGWTColorMap(image);
+		EditableColorMap img = ImageGWT.newGWTColorMap(image);
 		W = img.getWidth();
 		H = img.getHeight();
 
@@ -161,7 +161,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		fileResult.setDoneInMills(mills);
 	}
 
-	private boolean hasNonTransparentNeighbour(int x0, int y0, ColorMap img) {
+	private boolean hasNonTransparentNeighbour(int x0, int y0, EditableColorMap img) {
 		// TODO Auto-generated method stub
 		int D = 1;
 		for (int k = -D; k <= D; k++) {
@@ -193,7 +193,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		return false;
 	}
 
-	private HashSet<Int2> scan(ZxZ_Functuion<Color> function, Integer borderIndex, ColorMap img, HashSet<Int2> border) {
+	private HashSet<Int2> scan(ZxZ_Functuion<Color> function, Integer borderIndex, EditableColorMap img, HashSet<Int2> border) {
 		HashSet<Int2> newBorder = new HashSet<Int2>();
 		for (Int2 pointer : border) {
 			long x = pointer.getX();
