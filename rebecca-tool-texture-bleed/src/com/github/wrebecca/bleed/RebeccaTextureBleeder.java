@@ -9,15 +9,12 @@ import com.jfixby.cmns.api.collections.ZxZ_Functuion;
 import com.jfixby.cmns.api.color.Color;
 import com.jfixby.cmns.api.color.Colors;
 import com.jfixby.cmns.api.filesystem.File;
-import com.jfixby.cmns.api.filesystem.FileInputStream;
 import com.jfixby.cmns.api.image.ColorFunction;
-import com.jfixby.cmns.api.image.ImageProcessing;
-import com.jfixby.cmns.api.io.Buffer;
-import com.jfixby.cmns.api.io.IO;
 import com.jfixby.cmns.api.math.Int2;
 import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.path.ChildrenList;
 import com.jfixby.cmns.api.sys.Sys;
+import com.jfixby.cv.api.gwt.ImageGWT;
 import com.jfixby.tools.bleed.api.TextureBleedComponent;
 import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
@@ -67,8 +64,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 	}
 
 	@Override
-	public TextureBleedResult process(TextureBleedSpecs specs)
-			throws IOException {
+	public TextureBleedResult process(TextureBleedSpecs specs) throws IOException {
 		TextureBleedResultImpl result = new TextureBleedResultImpl();
 
 		File folder = specs.getInputFolder();
@@ -96,18 +92,14 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 
 	}
 
-	private void process(File png, TextureBleedResultImpl result)
-			throws IOException {
+	private void process(File png, TextureBleedResultImpl result) throws IOException {
 		FileResultImpl fileResult = new FileResultImpl();
 		fileResult.setProcessedFile(png);
 		long start_time = System.currentTimeMillis();
 		result.addFileResult(fileResult);
 		System.out.println("Processing: " + png);
-		FileInputStream is = png.newInputStream();
-		Buffer buffer = IO.readStreamToBuffer(is);
-		is.close();
-		BufferedImage image = ImageProcessing.readJavaImage(png);
-		ColorFunction img = ImageProcessing.newColorFunction(buffer);
+		BufferedImage image = ImageGWT.readJavaImage(png);
+		ColorFunction img = ImageGWT.newColorFunction(image);
 		W = img.getWidth();
 		H = img.getHeight();
 
@@ -164,7 +156,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			}
 		}
 		image = img.toJavaImage();
-		ImageProcessing.writeJavaFile(image, png, "png");
+		ImageGWT.writeJavaFile(image, png, "png");
 		long mills = System.currentTimeMillis() - start_time;
 		fileResult.setDoneInMills(mills);
 	}
@@ -201,8 +193,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		return false;
 	}
 
-	private HashSet<Int2> scan(ZxZ_Functuion<Color> function,
-			Integer borderIndex, ColorFunction img, HashSet<Int2> border) {
+	private HashSet<Int2> scan(ZxZ_Functuion<Color> function, Integer borderIndex, ColorFunction img, HashSet<Int2> border) {
 		HashSet<Int2> newBorder = new HashSet<Int2>();
 		for (Int2 pointer : border) {
 			long x = pointer.getX();
@@ -210,16 +201,14 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			if (function.getValueAt(x, y) != null) {
 				continue;
 			}
-			Color bestColor = addNUllNeighbours(x, y, newBorder, border,
-					function);
+			Color bestColor = addNUllNeighbours(x, y, newBorder, border, function);
 			function.setValueAt(x, y, bestColor);
 		}
 		newBorder.removeAll(border);
 		return newBorder;
 	}
 
-	Color addNUllNeighbours(long x0, long y0, HashSet<Int2> newBorder,
-			HashSet<Int2> border, ZxZ_Functuion<Color> function) {
+	Color addNUllNeighbours(long x0, long y0, HashSet<Int2> newBorder, HashSet<Int2> border, ZxZ_Functuion<Color> function) {
 		// TODO Auto-generated method stub
 		HashSet<Int2> coloredNeighbours = new HashSet<Int2>();
 		int D = 1;
@@ -257,8 +246,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		float g = 0;
 		float b = 0;
 		for (Int2 neighbour : coloredNeighbours) {
-			Color color = function.getValueAt(neighbour.getX(),
-					neighbour.getY());
+			Color color = function.getValueAt(neighbour.getX(), neighbour.getY());
 			r = r + color.red();
 			g = g + color.green();
 			b = b + color.blue();
