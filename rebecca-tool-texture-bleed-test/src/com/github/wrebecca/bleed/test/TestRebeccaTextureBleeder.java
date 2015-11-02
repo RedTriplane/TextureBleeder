@@ -16,6 +16,8 @@ import com.jfixby.cmns.api.md5.MD5;
 import com.jfixby.cmns.api.net.http.Http;
 import com.jfixby.cmns.api.sys.Sys;
 import com.jfixby.cmns.jutils.desktop.DesktopUtils;
+import com.jfixby.cv.api.gwt.ImageGWT;
+import com.jfixby.cv.red.gwt.RedImageGWT;
 import com.jfixby.red.color.RedColors;
 import com.jfixby.red.desktop.filesystem.win.WinFileSystem;
 import com.jfixby.red.desktop.img.processing.DesktopImageProcessing;
@@ -45,12 +47,12 @@ public class TestRebeccaTextureBleeder {
 		TextureBleed.installComponent(new RebeccaTextureBleeder());
 		ImageProcessing.installComponent(new DesktopImageProcessing());
 		Colors.installComponent(new RedColors());
+		ImageGWT.installComponent(new RedImageGWT());
 
 		TextureBleedSpecs bleedSpecs = TextureBleed.newSpecs();
 		bleedSpecs.setDebugMode(true);
-		 bleedSpecs.setPaddingSize(Integer.MAX_VALUE);
-		File examples_folder = LocalFileSystem.ApplicationHome().child(
-				"examples");
+		bleedSpecs.setPaddingSize(Integer.MAX_VALUE);
+		File examples_folder = LocalFileSystem.ApplicationHome().child("examples");
 		File tmp_folder = LocalFileSystem.ApplicationHome().child("tmp");
 		bleedSpecs.setInputFolder(tmp_folder);
 

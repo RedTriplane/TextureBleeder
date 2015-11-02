@@ -7,5 +7,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/jfixby-cmns-red-desktop"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jfixby-tool-texture-bleed-api"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/rebecca-tool-texture-bleed"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jfixby-cv-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jfixby-cv-red"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
