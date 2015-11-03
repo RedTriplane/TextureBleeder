@@ -3,8 +3,13 @@ package com.jfixby.tool.texture.bleed.red;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import com.jfixby.cmns.api.collections.JUtils;
+import com.jfixby.cmns.api.collections.List;
+import com.jfixby.cmns.api.color.Color;
 import com.jfixby.cmns.api.color.Colors;
 import com.jfixby.cmns.api.filesystem.File;
+import com.jfixby.cmns.api.floatn.FixedFloat2;
+import com.jfixby.cmns.api.floatn.Float2;
 import com.jfixby.cmns.api.geometry.Geometry;
 import com.jfixby.cmns.api.geometry.Rectangle;
 import com.jfixby.cmns.api.image.EditableColorMap;
@@ -73,11 +78,14 @@ public class RedTextureBleeder implements TextureBleedComponent {
 		W = input.getWidth();
 		H = input.getHeight();
 
-		LambdaColoredImage base = xy -> Colors.BLUE();
+		LambdaColoredImage colors = input.getLambdaColoredImage();
+
+		Rectangle rectangle = Geometry.newRectangle(W, H);
+		LambdaColoredImage base = wrap(colors, 4, rectangle);
 
 		LambdaColorMapSpecs lambda_specs = ImageProcessing.newLambdaColorMapSpecs();
 		lambda_specs.setAlphaChannel(null);
-		Rectangle rectangle = Geometry.newRectangle(W, H);
+
 		lambda_specs.setLambdaArea(rectangle);
 		lambda_specs.setColorMapWidth(W);
 		lambda_specs.setColorMapHeight(H);
@@ -89,6 +97,91 @@ public class RedTextureBleeder implements TextureBleedComponent {
 		ImageGWT.writeToFile(image, png, "png");
 		long mills = System.currentTimeMillis() - start_time;
 		fileResult.setDoneInMills(mills);
+	}
+
+	private LambdaColoredImage wrap(LambdaColoredImage colors, int n, Rectangle area) {
+		if (n == 0) {
+			return colors;
+		}
+		Color random = Colors.newRandomColor(1);
+		LambdaColoredImage base = xy -> {
+			L.d("xy", xy);
+			final Color color = colors.value(xy);
+			return color;
+			// if (color.alpha() == 1) {
+			// return color;
+			// } else {
+			// // List<FixedFloat2> colored_neighbours = JUtils.newList();
+			// // collect_colored_neighbours(xy, colored_neighbours, colors,
+			// // area);
+			// // if (colored_neighbours.size() == 0) {
+			// // return colors.value(xy);
+			// // } else {
+			// // // colored_neighbours.print("colored_neighbours");
+			// // return random;
+			// // }
+			// return random;
+			// }
+
+		};
+		return base;
+	}
+
+	static final private void collect_colored_neighbours(FixedFloat2 xy, List<FixedFloat2> colored_neighbours, LambdaColoredImage colors, Rectangle area) {
+		double x0 = xy.getX();
+		double y0 = xy.getY();
+		int D = 1;
+		for (int k = -D; k <= D; k++) {
+			for (int p = -D; p <= D; p++) {
+				if (k == 0 && p == 0) {
+					continue;
+				}
+				final double x = (k + x0);
+				final double y = (p + y0);
+
+				if (!area.containsPoint(x, y)) {
+					continue;
+				}
+				Float2 neighbour = Geometry.newFloat2(x, y);
+				if (colors.value(neighbour).alpha() == 1) {
+					colored_neighbours.add(neighbour);
+					return;
+				}
+			}
+		}
+
+	}
+
+	private boolean hasNonTransparentNeighbour(int x0, int y0, EditableColorMap img) {
+		// TODO Auto-generated method stub
+		int D = 1;
+		for (int k = -D; k <= D; k++) {
+			for (int p = -D; p <= D; p++) {
+				if (k == 0 && p == 0) {
+					continue;
+				}
+				int x = (int) (k + x0);
+				int y = (int) (p + y0);
+				if (x < 0) {
+					continue;
+				}
+				if (y < 0) {
+					continue;
+				}
+				if (x >= W) {
+					continue;
+				}
+				if (y >= H) {
+					continue;
+				}
+
+				Color neighbour = img.getValue(x, y);
+				if (neighbour.alpha() > 0.999f) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
