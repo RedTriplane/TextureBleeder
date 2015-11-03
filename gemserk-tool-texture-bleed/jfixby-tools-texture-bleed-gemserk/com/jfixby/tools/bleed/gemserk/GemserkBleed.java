@@ -9,7 +9,7 @@ import com.jfixby.tools.bleed.api.TextureBleedSpecs;
 public class GemserkBleed implements TextureBleedComponent {
 
 	@Override
-	public TextureBleedSpecs newGemserkProcessorSpecs() {
+	public TextureBleedSpecs newTextureBleedSpecs() {
 		return new GemserkProcessorSpecsImpl();
 	}
 

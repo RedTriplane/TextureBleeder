@@ -58,7 +58,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 	private int maxScans;
 
 	@Override
-	public TextureBleedSpecs newGemserkProcessorSpecs() {
+	public TextureBleedSpecs newTextureBleedSpecs() {
 		// TODO Auto-generated method stub
 		return new TextureBleedSpecsImpl();
 	}

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public interface TextureBleedComponent {
 
-	TextureBleedSpecs newGemserkProcessorSpecs();
+	TextureBleedSpecs newTextureBleedSpecs();
 
 	TextureBleedResult process(TextureBleedSpecs specs) throws IOException;
 
