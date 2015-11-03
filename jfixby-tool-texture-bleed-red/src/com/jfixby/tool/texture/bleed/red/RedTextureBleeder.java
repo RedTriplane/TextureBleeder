@@ -16,7 +16,7 @@ import com.jfixby.cmns.api.image.EditableColorMap;
 import com.jfixby.cmns.api.image.ImageProcessing;
 import com.jfixby.cmns.api.image.LambdaColorMap;
 import com.jfixby.cmns.api.image.LambdaColorMapSpecs;
-import com.jfixby.cmns.api.image.LambdaColoredImage;
+import com.jfixby.cmns.api.image.LambdaImage;
 import com.jfixby.cmns.api.log.L;
 import com.jfixby.cmns.api.path.ChildrenList;
 import com.jfixby.cv.api.gwt.ImageGWT;
@@ -78,13 +78,12 @@ public class RedTextureBleeder implements TextureBleedComponent {
 		W = input.getWidth();
 		H = input.getHeight();
 
-		LambdaColoredImage colors = input.getLambdaColoredImage();
+		LambdaImage colors = input.getLambdaColoredImage();
 
 		Rectangle rectangle = Geometry.newRectangle(W, H);
-		LambdaColoredImage base = wrap(colors, 4, rectangle);
+		LambdaImage base = wrap(colors, 1, rectangle);
 
 		LambdaColorMapSpecs lambda_specs = ImageProcessing.newLambdaColorMapSpecs();
-		lambda_specs.setAlphaChannel(null);
 
 		lambda_specs.setLambdaArea(rectangle);
 		lambda_specs.setColorMapWidth(W);
@@ -99,35 +98,34 @@ public class RedTextureBleeder implements TextureBleedComponent {
 		fileResult.setDoneInMills(mills);
 	}
 
-	private LambdaColoredImage wrap(LambdaColoredImage colors, int n, Rectangle area) {
+	private LambdaImage wrap(LambdaImage colors, int n, Rectangle area) {
 		if (n == 0) {
 			return colors;
 		}
+
+		LambdaImage wrapped = wrap(colors, n - 1, area);
+
 		Color random = Colors.newRandomColor(1);
-		LambdaColoredImage base = xy -> {
-			L.d("xy", xy);
-			final Color color = colors.value(xy);
-			return color;
-			// if (color.alpha() == 1) {
-			// return color;
-			// } else {
-			// // List<FixedFloat2> colored_neighbours = JUtils.newList();
-			// // collect_colored_neighbours(xy, colored_neighbours, colors,
-			// // area);
-			// // if (colored_neighbours.size() == 0) {
-			// // return colors.value(xy);
-			// // } else {
-			// // // colored_neighbours.print("colored_neighbours");
-			// // return random;
-			// // }
-			// return random;
-			// }
+		LambdaImage base = xy -> {
+			// L.d("xy", xy);
+			final Color color = wrapped.value(xy);
+			if (color.alpha() == 1) {
+				return color;
+			} else {
+				List<FixedFloat2> colored_neighbours = JUtils.newList();
+				collect_colored_neighbours(xy, colored_neighbours, wrapped, area);
+				if (colored_neighbours.size() == 0) {
+					return wrapped.value(xy);
+				} else {
+					return random;
+				}
+			}
 
 		};
 		return base;
 	}
 
-	static final private void collect_colored_neighbours(FixedFloat2 xy, List<FixedFloat2> colored_neighbours, LambdaColoredImage colors, Rectangle area) {
+	static final private void collect_colored_neighbours(FixedFloat2 xy, List<FixedFloat2> colored_neighbours, LambdaImage colors, Rectangle area) {
 		double x0 = xy.getX();
 		double y0 = xy.getY();
 		int D = 1;
