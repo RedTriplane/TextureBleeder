@@ -81,7 +81,7 @@ public class RedTextureBleeder implements TextureBleedComponent {
 		LambdaImage colors = input.getLambdaColoredImage();
 
 		Rectangle rectangle = Geometry.newRectangle(W, H);
-		LambdaImage base = wrap(colors, 1, rectangle);
+		LambdaImage base = wrap(colors, 5, rectangle);
 
 		LambdaColorMapSpecs lambda_specs = ImageProcessing.newLambdaColorMapSpecs();
 
@@ -98,31 +98,55 @@ public class RedTextureBleeder implements TextureBleedComponent {
 		fileResult.setDoneInMills(mills);
 	}
 
-	private LambdaImage wrap(LambdaImage colors, int n, Rectangle area) {
-		if (n == 0) {
-			return colors;
-		}
-
-		LambdaImage wrapped = wrap(colors, n - 1, area);
-
+	private LambdaImage wrap(LambdaImage parent, int n, Rectangle area) {
 		Color random = Colors.newRandomColor(1);
 		LambdaImage base = xy -> {
-			// L.d("xy", xy);
-			final Color color = wrapped.value(xy);
+			final Color color = parent.value(xy);
 			if (color.alpha() == 1) {
 				return color;
-			} else {
-				List<FixedFloat2> colored_neighbours = JUtils.newList();
-				collect_colored_neighbours(xy, colored_neighbours, wrapped, area);
-				if (colored_neighbours.size() == 0) {
-					return wrapped.value(xy);
-				} else {
-					return random;
-				}
+			}
+			if (hasNonTransparentNeighbour(xy, parent, area)) {
+				return random;
 			}
 
+			// List<FixedFloat2> colored_neighbours = JUtils.newList();
+			// collect_colored_neighbours(xy, colored_neighbours, parent, area);
+			// if (colored_neighbours.size() > 0) {
+			// return random;
+			// }
+			//
+			if (n == 0) {
+				return Colors.BLUE();
+			} else {
+				return wrap(parent, n - 1, area).value(xy);
+			}
+			// return wrap(parent, n - 1, area).value(xy);
 		};
+
 		return base;
+	}
+
+	private boolean hasNonTransparentNeighbour(FixedFloat2 xy, LambdaImage img, Rectangle area) {
+		double x0 = xy.getX();
+		double y0 = xy.getY();
+		int D = 1;
+		for (int k = -D; k <= D; k++) {
+			for (int p = -D; p <= D; p++) {
+				if (k == 0 && p == 0) {
+					continue;
+				}
+				final double x = (k + x0);
+				final double y = (p + y0);
+				if (!area.containsPoint(x, y)) {
+					continue;
+				}
+				Float2 neighbour = Geometry.newFloat2(x, y);
+				if (img.value(neighbour).alpha() == 1) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	static final private void collect_colored_neighbours(FixedFloat2 xy, List<FixedFloat2> colored_neighbours, LambdaImage colors, Rectangle area) {
