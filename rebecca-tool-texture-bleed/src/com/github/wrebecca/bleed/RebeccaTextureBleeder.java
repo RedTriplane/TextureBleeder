@@ -4,12 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashSet;
 
-import com.jfixby.cmns.api.collections.JUtils;
-import com.jfixby.cmns.api.collections.ZxZ_Functuion;
 import com.jfixby.cmns.api.color.Color;
 import com.jfixby.cmns.api.color.Colors;
 import com.jfixby.cmns.api.filesystem.File;
 import com.jfixby.cmns.api.image.EditableColorMap;
+import com.jfixby.cmns.api.log.L;
 import com.jfixby.cmns.api.math.Int2;
 import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.path.ChildrenList;
@@ -106,17 +105,18 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		// Set<Integer> colors = JUtils.newSet();
 		HashSet<Int2> border = new HashSet<Int2>();
 
-		ZxZ_Functuion<Color> function = JUtils.newZxZ_Function();
+		Color[][] function = new Color[W][H];
 
 		for (int x = 0; x < W; x++) {
 			for (int y = 0; y < H; y++) {
 				Int2 pointer = IntegerMath.newInt2(x, y);
 				Color color = img.getValue(x, y);
 				if (color.alpha() > 0.999f) {
-					function.setValueAt(x, y, color);
+					function[x][y] = color;
 					// colors.add(0);
 				} else if (hasNonTransparentNeighbour(x, y, img)) {
 					border.add(pointer);
+
 				}
 
 			}
@@ -126,6 +126,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		long timer = 0;
 		long DELTA = 100;
 		for (; border.size() > 0; k++) {
+			L.d(border);
 			if (k >= maxScans) {
 				break;
 			}
@@ -148,7 +149,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		for (int x = 0; x < W; x++) {
 			for (int y = 0; y < H; y++) {
 				Color colorValue = null;
-				colorValue = function.getValueAt(x, y);
+				colorValue = function[x][y];
 				if (colorValue == null) {
 					colorValue = Colors.PURPLE();
 				}
@@ -193,22 +194,22 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		return false;
 	}
 
-	private HashSet<Int2> scan(ZxZ_Functuion<Color> function, Integer borderIndex, EditableColorMap img, HashSet<Int2> border) {
+	private HashSet<Int2> scan(Color[][] function, Integer borderIndex, EditableColorMap img, HashSet<Int2> border) {
 		HashSet<Int2> newBorder = new HashSet<Int2>();
 		for (Int2 pointer : border) {
-			long x = pointer.getX();
-			long y = pointer.getY();
-			if (function.getValueAt(x, y) != null) {
+			int x = (int) pointer.getX();
+			int y = (int) pointer.getY();
+			if (function[x][y] != null) {
 				continue;
 			}
 			Color bestColor = addNUllNeighbours(x, y, newBorder, border, function);
-			function.setValueAt(x, y, bestColor);
+			function[x][y] = bestColor;
 		}
 		newBorder.removeAll(border);
 		return newBorder;
 	}
 
-	Color addNUllNeighbours(long x0, long y0, HashSet<Int2> newBorder, HashSet<Int2> border, ZxZ_Functuion<Color> function) {
+	Color addNUllNeighbours(int x0, int y0, HashSet<Int2> newBorder, HashSet<Int2> border, Color[][] function) {
 		// TODO Auto-generated method stub
 		HashSet<Int2> coloredNeighbours = new HashSet<Int2>();
 		int D = 1;
@@ -232,7 +233,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 					continue;
 				}
 
-				Color neighbour = function.getValueAt(x, y);
+				Color neighbour = function[x][y];
 				Int2 pointer = IntegerMath.newInt2(x, y);
 				if (neighbour == null) {
 					newBorder.add(pointer);
@@ -246,7 +247,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		float g = 0;
 		float b = 0;
 		for (Int2 neighbour : coloredNeighbours) {
-			Color color = function.getValueAt(neighbour.getX(), neighbour.getY());
+			Color color = function[(int) neighbour.getX()][(int) neighbour.getY()];
 			r = r + color.red();
 			g = g + color.green();
 			b = b + color.blue();
