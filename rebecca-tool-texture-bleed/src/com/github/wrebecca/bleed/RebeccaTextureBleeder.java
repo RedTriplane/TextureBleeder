@@ -8,7 +8,6 @@ import com.jfixby.cmns.api.color.Color;
 import com.jfixby.cmns.api.color.Colors;
 import com.jfixby.cmns.api.filesystem.File;
 import com.jfixby.cmns.api.image.EditableColorMap;
-import com.jfixby.cmns.api.log.L;
 import com.jfixby.cmns.api.math.Int2;
 import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.path.ChildrenList;
@@ -126,7 +125,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		long timer = 0;
 		long DELTA = 100;
 		for (; border.size() > 0; k++) {
-			L.d(border);
+
 			if (k >= maxScans) {
 				break;
 			}
