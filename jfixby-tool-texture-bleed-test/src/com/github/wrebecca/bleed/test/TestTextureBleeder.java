@@ -57,7 +57,7 @@ public class TestTextureBleeder {
 
 		TextureBleedSpecs bleedSpecs = TextureBleed.newSpecs();
 		bleedSpecs.setDebugMode(true);
-		bleedSpecs.setPaddingSize(Integer.MAX_VALUE);
+		bleedSpecs.setPaddingSize(16);
 		File examples_folder = LocalFileSystem.ApplicationHome().child("examples");
 		File tmp_folder = LocalFileSystem.ApplicationHome().child("tmp");
 		bleedSpecs.setInputFolder(tmp_folder);
