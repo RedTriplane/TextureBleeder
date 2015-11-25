@@ -2,7 +2,6 @@ package com.github.wrebecca.bleed.test;
 
 import java.io.IOException;
 
-import com.jfixby.cmns.api.collections.JUtils;
 import com.jfixby.cmns.api.color.Colors;
 import com.jfixby.cmns.api.filesystem.File;
 import com.jfixby.cmns.api.filesystem.LocalFileSystem;
@@ -15,6 +14,7 @@ import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.md5.MD5;
 import com.jfixby.cmns.api.net.http.Http;
 import com.jfixby.cmns.api.sys.Sys;
+import com.jfixby.cmns.api.util.JUtils;
 import com.jfixby.cmns.jutils.desktop.DesktopUtils;
 import com.jfixby.cv.api.cv.CV;
 import com.jfixby.cv.api.gwt.ImageGWT;
