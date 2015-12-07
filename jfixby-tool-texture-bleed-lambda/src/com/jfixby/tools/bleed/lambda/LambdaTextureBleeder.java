@@ -2,7 +2,6 @@ package com.jfixby.tools.bleed.lambda;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashSet;
 
 import com.jfixby.cmns.api.collections.List;
 import com.jfixby.cmns.api.color.Color;
@@ -10,15 +9,11 @@ import com.jfixby.cmns.api.color.Colors;
 import com.jfixby.cmns.api.color.CustomColor;
 import com.jfixby.cmns.api.filesystem.File;
 import com.jfixby.cmns.api.image.ColorMap;
-import com.jfixby.cmns.api.image.EditableColorMap;
 import com.jfixby.cmns.api.image.ImageProcessing;
 import com.jfixby.cmns.api.image.LambdaColorMapSpecs;
 import com.jfixby.cmns.api.lambda.Lambda;
 import com.jfixby.cmns.api.lambda.λFunction;
-import com.jfixby.cmns.api.log.L;
-import com.jfixby.cmns.api.math.FixedInt2;
-import com.jfixby.cmns.api.math.Int2;
-import com.jfixby.cmns.api.math.IntegerMath;
+import com.jfixby.cmns.api.lambda.λImage;
 import com.jfixby.cmns.api.path.ChildrenList;
 import com.jfixby.cmns.api.util.JUtils;
 import com.jfixby.cv.api.cv.CV;
@@ -33,8 +28,8 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 	private int W;
 	private int H;
 	private int maxScans;
-	private λFunction<FixedInt2, Color> emty = xy -> Colors.PURPLE();
-	private λFunction<Integer, λFunction<FixedInt2, Color>> STACK;
+	private λImage emty = (x, y) -> Colors.PURPLE();
+	private λFunction<Integer, λImage> STACK;
 
 	@Override
 	public TextureBleedSpecs newTextureBleedSpecs() {
@@ -84,13 +79,13 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 		W = img.getWidth();
 		H = img.getHeight();
 
-		λFunction<FixedInt2, Color> λimage = img.getLambdaImage();
-		λFunction<Integer, λFunction<FixedInt2, Color>> layers_stack = buildStack(maxScans, λimage, W, H);
+		λImage λimage = img.getLambdaImage();
+		λFunction<Integer, λImage> layers_stack = buildStack(maxScans, λimage, W, H);
 		STACK = layers_stack;
 
-		λFunction<FixedInt2, Color> result = merge(layers_stack, W, H, maxScans);
+		λImage result = merge(layers_stack, W, H, maxScans);
 
-		// λFunction<FixedInt2, Color> result = wrap(maxScans, λimage, W, H);
+		// λImage result = wrap(maxScans, λimage, W, H);
 		int k = 0;
 		System.out.println();
 		// System.out.println("Scans performed: " + k);
@@ -107,12 +102,12 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 		fileResult.setDoneInMills(mills);
 	}
 
-	private λFunction<FixedInt2, Color> merge(λFunction<Integer, λFunction<FixedInt2, Color>> layers_stack, int w, int h, int maxScans) {
-		λFunction<FixedInt2, Color> result = xy -> {
+	private λImage merge(λFunction<Integer, λImage> layers_stack, int w, int h, int maxScans) {
+		λImage result = (x, y) -> {
 
 			for (int i = 0; i < maxScans; i++) {
-				λFunction<FixedInt2, Color> fn = layers_stack.val(i);
-				Color color = fn.val(xy);
+				λImage fn = layers_stack.val(i);
+				Color color = fn.val(x, y);
 				if (color.alpha() == 1) {
 					return color;
 				}
@@ -122,8 +117,8 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 		return result;
 	}
 
-	private λFunction<Integer, λFunction<FixedInt2, Color>> buildStack(int maxScans, λFunction<FixedInt2, Color> λimage, int w, int h) {
-		λFunction<Integer, λFunction<FixedInt2, Color>> stack = i -> {
+	private λFunction<Integer, λImage> buildStack(int maxScans, λImage λimage, int w, int h) {
+		λFunction<Integer, λImage> stack = i -> {
 			if (i == 0) {
 				return λimage;
 			}
@@ -137,15 +132,15 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 		return stack;
 	}
 
-	private λFunction<FixedInt2, Color> fn(int n, λFunction<Integer, λFunction<FixedInt2, Color>> STACK, int w, int h) {
-		λFunction<FixedInt2, Color> fn = xy -> {
-			λFunction<FixedInt2, Color> fn_1 = STACK.val(n - 1);
-			Color color = fn_1.val(xy);
+	private λImage fn(int n, λFunction<Integer, λImage> STACK, int w, int h) {
+		λImage fn = (x, y) -> {
+			λImage fn_1 = STACK.val(n - 1);
+			Color color = fn_1.val(x, y);
 			if (color.alpha() == 1) {
 				return color;
 			}
 			List<Color> collectedColors = JUtils.newList();
-			collectNotNullNeighbours(xy.getX(), xy.getY(), fn_1, w, h, collectedColors);
+			collectNotNullNeighbours((long) x, (long) y, fn_1, w, h, collectedColors);
 			if (collectedColors.size() > 0) {
 				CustomColor average = Colors.newColor();
 				CV.averageColor(collectedColors, average);
@@ -154,11 +149,11 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 			}
 			return Colors.NO();
 		};
-		return Lambda.cache(fn, CV.newImageCache(w, h));
+		return CV.cache(fn, CV.newImageCache(w, h));
 		// return fn;
 	}
 
-	private void collectNotNullNeighbours(long x0, long y0, λFunction<FixedInt2, Color> λimage, int W, int H, List<Color> collectedColors) {
+	private void collectNotNullNeighbours(long x0, long y0, λImage λimage, int W, int H, List<Color> collectedColors) {
 		int D = 1;
 		for (int k = -D; k <= D; k++) {
 			for (int p = -D; p <= D; p++) {
@@ -179,8 +174,8 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 				if (y >= H) {
 					continue;
 				}
-				FixedInt2 neighbour = IntegerMath.newInt2(x, y);
-				Color neighbour_color = λimage.val(neighbour);
+
+				Color neighbour_color = λimage.val(x, y);
 				if (neighbour_color.alpha() == 1f) {
 					collectedColors.add(neighbour_color);
 				}
