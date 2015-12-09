@@ -3,7 +3,7 @@ package com.jfixby.tools.bleed.lambda;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import com.jfixby.cmns.api.collections.JUtils;
+import com.jfixby.cmns.api.collections.Collections;
 import com.jfixby.cmns.api.collections.List;
 import com.jfixby.cmns.api.color.Color;
 import com.jfixby.cmns.api.color.Colors;
@@ -139,7 +139,7 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 			if (color.alpha() == 1) {
 				return color;
 			}
-			List<Color> collectedColors = JUtils.newList();
+			List<Color> collectedColors = Collections.newList();
 			collectNotNullNeighbours((long) x, (long) y, fn_1, w, h, collectedColors);
 			if (collectedColors.size() > 0) {
 				CustomColor average = Colors.newColor();
