@@ -2,7 +2,7 @@ package com.github.wrebecca.bleed.test;
 
 import java.io.IOException;
 
-import com.jfixby.cmns.api.collections.JUtils;
+import com.jfixby.cmns.api.collections.Collections;
 import com.jfixby.cmns.api.color.Colors;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.file.LocalFileSystem;
@@ -15,7 +15,7 @@ import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.md5.MD5;
 import com.jfixby.cmns.api.net.http.Http;
 import com.jfixby.cmns.api.sys.Sys;
-import com.jfixby.cmns.jutils.desktop.DesktopUtils;
+import com.jfixby.cmns.collections.DesktopCollections;
 import com.jfixby.cv.api.cv.CV;
 import com.jfixby.cv.api.gwt.ImageGWT;
 import com.jfixby.cv.red.gwt.RedCV;
@@ -40,7 +40,7 @@ public class TestTextureBleeder {
 
 	public static void main(String[] args) throws IOException {
 		L.installComponent(new DesktopLogger());
-		JUtils.installComponent(new DesktopUtils());
+		Collections.installComponent(new DesktopCollections());
 		IO.installComponent(new RedIO());
 		IntegerMath.installComponent(new RedIntegerMath());
 		MD5.installComponent(new AlpaeroMD5());
