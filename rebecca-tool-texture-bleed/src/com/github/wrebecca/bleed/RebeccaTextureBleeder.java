@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 import com.jfixby.cmns.api.color.Color;
 import com.jfixby.cmns.api.color.Colors;
-import com.jfixby.cmns.api.filesystem.File;
+import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.image.EditableColorMap;
 import com.jfixby.cmns.api.math.Int2;
 import com.jfixby.cmns.api.math.IntegerMath;

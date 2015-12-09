@@ -1,6 +1,6 @@
 package com.jfixby.tools.bleed.lambda;
 
-import com.jfixby.cmns.api.filesystem.File;
+import com.jfixby.cmns.api.file.File;
 
 public class FileResultImpl {
 

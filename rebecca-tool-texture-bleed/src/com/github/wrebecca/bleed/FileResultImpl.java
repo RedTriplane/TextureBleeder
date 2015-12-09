@@ -1,6 +1,6 @@
 package com.github.wrebecca.bleed;
 
-import com.jfixby.cmns.api.filesystem.File;
+import com.jfixby.cmns.api.file.File;
 
 public class FileResultImpl {
 

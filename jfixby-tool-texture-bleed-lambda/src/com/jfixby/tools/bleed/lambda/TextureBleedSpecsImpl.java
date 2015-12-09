@@ -1,6 +1,6 @@
 package com.jfixby.tools.bleed.lambda;
 
-import com.jfixby.cmns.api.filesystem.File;
+import com.jfixby.cmns.api.file.File;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
 
 public class TextureBleedSpecsImpl implements TextureBleedSpecs {

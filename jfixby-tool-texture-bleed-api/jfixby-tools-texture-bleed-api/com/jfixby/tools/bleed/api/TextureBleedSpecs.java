@@ -1,6 +1,6 @@
 package com.jfixby.tools.bleed.api;
 
-import com.jfixby.cmns.api.filesystem.File;
+import com.jfixby.cmns.api.file.File;
 
 public interface TextureBleedSpecs {
 
