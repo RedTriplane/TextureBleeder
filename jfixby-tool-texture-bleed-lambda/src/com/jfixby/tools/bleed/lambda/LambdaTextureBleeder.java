@@ -15,7 +15,7 @@ import com.jfixby.cmns.api.image.ImageProcessing;
 import com.jfixby.cmns.api.image.LambdaColorMapSpecs;
 import com.jfixby.cmns.api.lambda.Lambda;
 import com.jfixby.cmns.api.lambda.λFunction;
-import com.jfixby.cmns.api.lambda.λImage;
+import com.jfixby.cmns.api.lambda.img.λImage;
 import com.jfixby.cv.api.cv.CV;
 import com.jfixby.cv.api.cv.λOperator;
 import com.jfixby.cv.api.gwt.ImageGWT;
@@ -107,7 +107,7 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 
 			for (int i = 0; i < maxScans; i++) {
 				λImage fn = layers_stack.val(i);
-				Color color = fn.val(x, y);
+				Color color = fn.valueAt(x, y);
 				if (color.alpha() == 1) {
 					return color;
 				}
@@ -135,7 +135,7 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 	private λImage fn(int n, λFunction<Integer, λImage> STACK, int w, int h) {
 		λImage fn = (x, y) -> {
 			λImage fn_1 = STACK.val(n - 1);
-			Color color = fn_1.val(x, y);
+			Color color = fn_1.valueAt(x, y);
 			if (color.alpha() == 1) {
 				return color;
 			}
@@ -175,7 +175,7 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 					continue;
 				}
 
-				Color neighbour_color = λimage.val(x, y);
+				Color neighbour_color = λimage.valueAt(x, y);
 				if (neighbour_color.alpha() == 1f) {
 					collectedColors.add(neighbour_color);
 				}
