@@ -21,7 +21,7 @@ import com.jfixby.cv.api.gwt.ImageGWT;
 import com.jfixby.cv.red.gwt.RedCV;
 import com.jfixby.cv.red.gwt.RedImageGWT;
 import com.jfixby.red.color.RedColors;
-import com.jfixby.red.desktop.filesystem.win.WinFileSystem;
+import com.jfixby.red.desktop.filesystem.unix.UnixFileSystem;
 import com.jfixby.red.desktop.img.processing.DesktopImageProcessing;
 import com.jfixby.red.desktop.log.DesktopLogger;
 import com.jfixby.red.desktop.math.DesktopFloatMath;
@@ -39,21 +39,7 @@ import com.jfixby.tools.bleed.lambda.LambdaTextureBleeder;
 public class TestTextureBleeder {
 
 	public static void main(String[] args) throws IOException {
-		L.installComponent(new DesktopLogger());
-		Collections.installComponent(new DesktopCollections());
-		IO.installComponent(new RedIO());
-		IntegerMath.installComponent(new RedIntegerMath());
-		MD5.installComponent(new AlpaeroMD5());
-		Sys.installComponent(new DesktopSystem());
-		LocalFileSystem.installComponent(new WinFileSystem());
-		Http.installComponent(new HttpDesktopComponent());
-		FloatMath.installComponent(new DesktopFloatMath());
-		TextureBleed.installComponent(new LambdaTextureBleeder());
-		ImageProcessing.installComponent(new DesktopImageProcessing());
-		Colors.installComponent(new RedColors());
-		ImageGWT.installComponent(new RedImageGWT());
-		CV.installComponent(new RedCV());
-		Lambda.installComponent(new RedLambda());
+
 
 		TextureBleedSpecs bleedSpecs = TextureBleed.newSpecs();
 		bleedSpecs.setDebugMode(true);
