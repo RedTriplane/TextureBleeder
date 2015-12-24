@@ -2,39 +2,11 @@ package com.github.wrebecca.bleed.test;
 
 import java.io.IOException;
 
-import com.jfixby.cmns.api.collections.Collections;
-import com.jfixby.cmns.api.color.Colors;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.file.LocalFileSystem;
-import com.jfixby.cmns.api.image.ImageProcessing;
-import com.jfixby.cmns.api.io.IO;
-import com.jfixby.cmns.api.lambda.Lambda;
-import com.jfixby.cmns.api.log.L;
-import com.jfixby.cmns.api.math.FloatMath;
-import com.jfixby.cmns.api.math.IntegerMath;
-import com.jfixby.cmns.api.md5.MD5;
-import com.jfixby.cmns.api.net.http.Http;
-import com.jfixby.cmns.api.sys.Sys;
-import com.jfixby.cmns.collections.DesktopCollections;
-import com.jfixby.cv.api.cv.CV;
-import com.jfixby.cv.api.gwt.ImageGWT;
-import com.jfixby.cv.red.gwt.RedCV;
-import com.jfixby.cv.red.gwt.RedImageGWT;
-import com.jfixby.red.color.RedColors;
-import com.jfixby.red.desktop.filesystem.unix.UnixFileSystem;
-import com.jfixby.red.desktop.img.processing.DesktopImageProcessing;
-import com.jfixby.red.desktop.log.DesktopLogger;
-import com.jfixby.red.desktop.math.DesktopFloatMath;
-import com.jfixby.red.desktop.math.RedIntegerMath;
-import com.jfixby.red.desktop.net.HttpDesktopComponent;
-import com.jfixby.red.desktop.sys.DesktopSystem;
-import com.jfixby.red.io.RedIO;
-import com.jfixby.red.lambda.RedLambda;
-import com.jfixby.red.util.md5.AlpaeroMD5;
 import com.jfixby.tools.bleed.api.TextureBleed;
 import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
-import com.jfixby.tools.bleed.lambda.LambdaTextureBleeder;
 
 public class TestTextureBleeder {
 
