@@ -149,7 +149,8 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 	    }
 	    return Colors.NO();
 	};
-	return CV.cache(fn, ImageProcessing.newImageCache(w, h));
+	// return CV.cache(fn, ImageProcessing.newImageCache(w, h));
+	return fn;
 	// return fn;
     }
 
