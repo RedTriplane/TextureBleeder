@@ -91,7 +91,7 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 	// System.out.println("Scans performed: " + k);
 	fileResult.setScansPerformed(k);
 	// int maxDistance = colors.size();
-	ColorMapSpecs lambda_specs = ImageProcessing.newLambdaColorMapSpecs();
+	ColorMapSpecs lambda_specs = ImageProcessing.newColorMapSpecs();
 	lambda_specs.setColorMapWidth(W);
 	lambda_specs.setColorMapHeight(H);
 	lambda_specs.setLambdaColoredImage(result);
