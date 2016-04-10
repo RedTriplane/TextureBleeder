@@ -66,7 +66,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 	TextureBleedResultImpl result = new TextureBleedResultImpl();
 
 	File folder = specs.getInputFolder();
-	ChildrenList pngFiles = folder.listChildren().filter(n -> {
+	ChildrenList pngFiles = folder.listChildren().filterFiles(n -> {
 	    return n.getName().toLowerCase().endsWith(".png");
 	});
 
