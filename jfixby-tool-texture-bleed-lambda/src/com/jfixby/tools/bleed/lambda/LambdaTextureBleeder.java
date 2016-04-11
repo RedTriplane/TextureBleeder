@@ -1,7 +1,6 @@
 
 package com.jfixby.tools.bleed.lambda;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import com.jfixby.cmns.api.collections.Collections;
@@ -13,13 +12,11 @@ import com.jfixby.cmns.api.desktop.ImageAWT;
 import com.jfixby.cmns.api.file.ChildrenList;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.image.ColorMap;
-import com.jfixby.cmns.api.image.ColorMapSpecs;
 import com.jfixby.cmns.api.image.ColoredλImage;
 import com.jfixby.cmns.api.image.ImageProcessing;
 import com.jfixby.cmns.api.lambda.Lambda;
 import com.jfixby.cmns.api.lambda.λFunction;
 import com.jfixby.cv.api.CV;
-import com.jfixby.cv.api.λOperator;
 import com.jfixby.tools.bleed.api.TextureBleedComponent;
 import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
@@ -43,9 +40,7 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 		TextureBleedResultImpl result = new TextureBleedResultImpl();
 
 		File folder = specs.getInputFolder();
-		ChildrenList pngFiles = folder.listChildren().filterFiles(n -> {
-			return n.getName().toLowerCase().endsWith(".png");
-		});
+		ChildrenList pngFiles = folder.listChildren().filterByExtension("png");
 
 		boolean debug_mode = specs.getDebugMode();
 		if (debug_mode) {
@@ -67,40 +62,52 @@ public class LambdaTextureBleeder implements TextureBleedComponent {
 
 	}
 
-	public static final λOperator wrap = null;
-
 	private void process (File png, TextureBleedResultImpl process_result) throws IOException {
 		FileResultImpl fileResult = new FileResultImpl();
 		fileResult.setProcessedFile(png);
 		long start_time = System.currentTimeMillis();
 		process_result.addFileResult(fileResult);
 		System.out.println("Processing: " + png);
-		BufferedImage image = ImageAWT.readFromFile(png);
-		ColorMap img = ImageAWT.newAWTColorMap(image);
+		ColorMap img = ImageAWT.readAWTColorMap(png);
 		W = img.getWidth();
 		H = img.getHeight();
-
-		ColoredλImage λimage = img.getLambdaImage();
-		λFunction<Integer, ColoredλImage> layers_stack = buildStack(maxScans, λimage, W, H);
-		STACK = layers_stack;
-
-		ColoredλImage result = merge(layers_stack, W, H, maxScans);
 
 		// λImage result = wrap(maxScans, λimage, W, H);
 		int k = 0;
 		System.out.println();
 		// System.out.println("Scans performed: " + k);
 		fileResult.setScansPerformed(k);
-		// int maxDistance = colors.size();
-		ColorMapSpecs lambda_specs = ImageProcessing.newColorMapSpecs();
-		lambda_specs.setColorMapWidth(W);
-		lambda_specs.setColorMapHeight(H);
-		lambda_specs.setLambdaColoredImage(result);
-		img = ImageProcessing.newColorMap(lambda_specs);
-		image = ImageAWT.toAWTImage(img);
-		ImageAWT.writeToFile(image, png, "png");
+
+		ColoredλImage lambda = (x, y) -> {
+			Color original_color = img.valueAt(x, y);
+			if (isVisible(original_color)) {
+				return original_color;
+			}
+			if (isInvisible(original_color)) {
+				return Colors.PURPLE();
+			}
+			if (isHalfTransparent(original_color)) {
+				return original_color.customize().setAlpha(0f);
+			}
+			return Colors.FUCHSIA();
+		};
+		ColorMap result_image = ImageProcessing.newColorMap(lambda, W, H);
+		ImageAWT.writeToFile(result_image, png, "png");
+
 		long mills = System.currentTimeMillis() - start_time;
 		fileResult.setDoneInMills(mills);
+	}
+
+	final private boolean isInvisible (final Color color) {
+		return color.alpha() <= 1f / 128f;
+	}
+
+	final private boolean isVisible (final Color color) {
+		return color.alpha() >= 1f - 1f / 128f;
+	}
+
+	final private boolean isHalfTransparent (final Color color) {
+		return (color.alpha() > 1f / 128f) && (color.alpha() < 1f - 1f / 128f);
 	}
 
 	private ColoredλImage merge (λFunction<Integer, ColoredλImage> layers_stack, int w, int h, int maxScans) {

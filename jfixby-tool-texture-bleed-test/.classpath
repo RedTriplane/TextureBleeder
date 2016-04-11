@@ -8,5 +8,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/jfixby-cv-api"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jfixby-tool-texture-bleed-api"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jfixby-tool-texture-bleed-lambda"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jfixby-lambda-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jfixby-lambda-red"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

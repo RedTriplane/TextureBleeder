@@ -44,6 +44,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 	private int W;
 	private int H;
 	private int maxScans;
+	private boolean debug_mode;
 
 	@Override
 	public TextureBleedSpecs newTextureBleedSpecs () {
@@ -60,10 +61,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			return n.getName().toLowerCase().endsWith(".png");
 		});
 
-		boolean debug_mode = specs.getDebugMode();
-		if (debug_mode) {
-			this.ALPHA = this.DEBUG_MODE_ALPHA;
-		}
+		debug_mode = specs.getDebugMode();
 
 		maxScans = specs.getPaddingSize();
 		if (maxScans < 0) {
@@ -100,8 +98,11 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			for (int y = 0; y < H; y++) {
 				Int2 pointer = IntegerMath.newInt2(x, y);
 				Color color = img.valueAt(x, y);
-				if (color.alpha() > 0.99f) {
+				if (!this.isInvisible(color)) {
 					function[x][y] = color;
+					if (debug_mode) {
+						function[x][y] = color.customize().setAlpha(1);
+					}
 					// colors.add(0);
 				} else if (hasNonTransparentNeighbour(x, y, img)) {
 					border.add(pointer);
@@ -139,7 +140,12 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			Color colorValue = null;
 			colorValue = function[(int)x][(int)y];
 			if (colorValue == null) {
-				colorValue = Colors.PURPLE();
+				if (debug_mode) {
+					colorValue = Colors.PURPLE();
+				} else {
+					Color original = img.valueAt(x, y);
+					colorValue = original;
+				}
 			}
 			return colorValue;
 		};
@@ -174,12 +180,24 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 				}
 
 				Color neighbour = img.valueAt(x, y);
-				if (neighbour.alpha() > 0.999f) {
+				if (!isInvisible(neighbour)) {
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	final private boolean isInvisible (final Color color) {
+		return color.alpha() <= 1f / 128f;
+	}
+
+	final private boolean isVisible (final Color color) {
+		return color.alpha() >= 1f - 1f / 128f;
+	}
+
+	final private boolean isHalfTransparent (final Color color) {
+		return (color.alpha() > 1f / 128f) && (color.alpha() < 1f - 1f / 128f);
 	}
 
 	private HashSet<Int2> scan (Color[][] function, Integer borderIndex, EditableColorMap img, HashSet<Int2> border) {
@@ -190,14 +208,15 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			if (function[x][y] != null) {
 				continue;
 			}
-			Color bestColor = addNUllNeighbours(x, y, newBorder, border, function);
+			Color original = img.valueAt(x, y);
+			Color bestColor = addNUllNeighbours(x, y, newBorder, border, function, original);
 			function[x][y] = bestColor;
 		}
 		newBorder.removeAll(border);
 		return newBorder;
 	}
 
-	Color addNUllNeighbours (int x0, int y0, HashSet<Int2> newBorder, HashSet<Int2> border, Color[][] function) {
+	Color addNUllNeighbours (int x0, int y0, HashSet<Int2> newBorder, HashSet<Int2> border, Color[][] function, Color original) {
 		// TODO Auto-generated method stub
 		HashSet<Int2> coloredNeighbours = new HashSet<Int2>();
 		int D = 1;
@@ -232,6 +251,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			}
 		}
 		float r = 0;
+		float a = 0;
 		float g = 0;
 		float b = 0;
 		for (Int2 neighbour : coloredNeighbours) {
@@ -243,13 +263,18 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		r = r / coloredNeighbours.size();
 		g = g / coloredNeighbours.size();
 		b = b / coloredNeighbours.size();
+		if (debug_mode) {
+			a = 1;
+		} else {
+			a = original.alpha();
+		}
 
-		return Colors.newColor(ALPHA, r, g, b);
+		return Colors.newColor(a, r, g, b);
 
 	}
 
-	float NORMAL_MODE_ALPHA = 0.0f;
-	float DEBUG_MODE_ALPHA = 1f;
-	float ALPHA = NORMAL_MODE_ALPHA;
+// float NORMAL_MODE_ALPHA = 0.0f;
+// float DEBUG_MODE_ALPHA = 1f;
+// float ALPHA = NORMAL_MODE_ALPHA;
 
 }
