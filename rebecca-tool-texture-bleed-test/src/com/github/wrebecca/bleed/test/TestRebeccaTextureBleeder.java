@@ -18,13 +18,15 @@ public class TestRebeccaTextureBleeder {
 		TextureBleed.installComponent(new RebeccaTextureBleeder());
 
 		TextureBleedSpecs bleedSpecs = TextureBleed.newSpecs();
-		bleedSpecs.setDebugMode(!true);
+		bleedSpecs.setDebugMode(true);
 		bleedSpecs.setPaddingSize(16);
 		File examples_folder = LocalFileSystem.ApplicationHome().child("examples");
 		File tmp_folder = LocalFileSystem.ApplicationHome().child("tmp");
-		bleedSpecs.setInputFolder(tmp_folder);
+		bleedSpecs.setInputFolder(examples_folder);
+		bleedSpecs.setOutputFolder(tmp_folder);
+		tmp_folder.delete();
 
-		LocalFileSystem.copyFolderContentsToFolder(examples_folder, tmp_folder);
+// LocalFileSystem.copyFolderContentsToFolder(examples_folder, tmp_folder);
 
 		TextureBleedResult result = TextureBleed.process(bleedSpecs);
 		result.print();

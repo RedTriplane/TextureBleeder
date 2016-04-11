@@ -13,6 +13,7 @@ import com.jfixby.cmns.api.image.ColorMap;
 import com.jfixby.cmns.api.image.ColoredλImage;
 import com.jfixby.cmns.api.image.EditableColorMap;
 import com.jfixby.cmns.api.image.ImageProcessing;
+import com.jfixby.cmns.api.log.L;
 import com.jfixby.cmns.api.math.Int2;
 import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.sys.Sys;
@@ -39,12 +40,13 @@ import com.jfixby.tools.bleed.api.TextureBleedSpecs;
  * 
  *         For more information, please refer to <http://unlicense.org/> */
 
-public class RebeccaTextureBleeder implements TextureBleedComponent {
+class RebeccaTextureBleeder implements TextureBleedComponent {
 
 	private int W;
 	private int H;
 	private int maxScans;
 	private boolean debug_mode;
+	private File output;
 
 	@Override
 	public TextureBleedSpecs newTextureBleedSpecs () {
@@ -56,8 +58,8 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 	public TextureBleedResult process (TextureBleedSpecs specs) throws IOException {
 		TextureBleedResultImpl result = new TextureBleedResultImpl();
 
-		File folder = specs.getInputFolder();
-		ChildrenList pngFiles = folder.listChildren().filterFiles(n -> {
+		File input = specs.getInputFolder();
+		ChildrenList pngFiles = input.listChildren().filterFiles(n -> {
 			return n.getName().toLowerCase().endsWith(".png");
 		});
 
@@ -68,8 +70,13 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			maxScans = TextureBleedSpecs.DEFAULT_PADDING;
 		}
 
-		System.out.println("maxScans: " + maxScans);
+		output = specs.getOutputFolder();
+		if (output == null) {
+			output = input;
+		}
 
+		System.out.println("maxScans: " + maxScans);
+		output.makeFolder();
 		for (File png : pngFiles) {
 			process(png, result);
 		}
@@ -78,13 +85,17 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 
 	}
 
-	private void process (File png, TextureBleedResultImpl result) throws IOException {
+	private void process (File inputFile, TextureBleedResultImpl result) throws IOException {
+
+		File outputFile = output.child(inputFile.getName());
+
 		FileResultImpl fileResult = new FileResultImpl();
-		fileResult.setProcessedFile(png);
+		fileResult.setInputFile(inputFile);
+		fileResult.setOutputFile(outputFile);
 		long start_time = System.currentTimeMillis();
 		result.addFileResult(fileResult);
-		System.out.println("Processing: " + png);
-		EditableColorMap img = ImageAWT.readAWTColorMap(png);
+		System.out.println("Processing: " + inputFile);
+		EditableColorMap img = ImageAWT.readAWTColorMap(inputFile);
 
 		W = img.getWidth();
 		H = img.getHeight();
@@ -99,10 +110,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 				Int2 pointer = IntegerMath.newInt2(x, y);
 				Color color = img.valueAt(x, y);
 				if (!this.isInvisible(color)) {
-					function[x][y] = color;
-					if (debug_mode) {
-						function[x][y] = color.customize().setAlpha(1);
-					}
+					function[x][y] = color.customize().setAlpha(1);
 					// colors.add(0);
 				} else if (hasNonTransparentNeighbour(x, y, img)) {
 					border.add(pointer);
@@ -137,23 +145,40 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		fileResult.setScansPerformed(k);
 
 		ColoredλImage lambda = (x, y) -> {
-			Color colorValue = null;
-			colorValue = function[(int)x][(int)y];
+			Color colorValue = function[(int)x][(int)y];
 			if (colorValue == null) {
-				if (debug_mode) {
-					colorValue = Colors.PURPLE();
-				} else {
-					Color original = img.valueAt(x, y);
-					colorValue = original;
-				}
+				colorValue = Colors.PURPLE();
+			}
+			{
+				float original_alpha = img.valueAt(x, y).alpha();
+// if (original_alpha < 1f / 128f) {
+// original_alpha = 1f / 128f;
+// }
+				original_alpha = 1;
+				colorValue = colorValue.customize().setAlpha(original_alpha);
 			}
 			return colorValue;
 		};
 		ColorMap result_image = ImageProcessing.newColorMap(lambda, W, H);
+		L.d("writing", outputFile);
+		ImageAWT.writeToFile(result_image, outputFile, "png");
 
-		ImageAWT.writeToFile(result_image, png, "png");
+		if (this.debug_mode) {
+			debugImage(outputFile);
+		}
 		long mills = System.currentTimeMillis() - start_time;
 		fileResult.setDoneInMills(mills);
+	}
+
+	private void debugImage (File outputFile) throws IOException {
+
+		final ColorMap image = ImageAWT.readAWTColorMap(outputFile);
+		ColoredλImage debug_lambda = (x, y) -> image.valueAt(x, y).customize().setAlpha(1);
+		ColorMap debug_image = ImageProcessing.newColorMap(debug_lambda, W, H);
+
+		File debugFile = outputFile.parent().child(outputFile.nameWithoutExtension() + "-debug.png");
+		L.d("  debug", debugFile);
+		ImageAWT.writeToFile(debug_image, debugFile, "png");
 	}
 
 	private boolean hasNonTransparentNeighbour (int x0, int y0, EditableColorMap img) {
@@ -251,7 +276,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 			}
 		}
 		float r = 0;
-		float a = 0;
+		float a = 1;
 		float g = 0;
 		float b = 0;
 		for (Int2 neighbour : coloredNeighbours) {
@@ -263,11 +288,7 @@ public class RebeccaTextureBleeder implements TextureBleedComponent {
 		r = r / coloredNeighbours.size();
 		g = g / coloredNeighbours.size();
 		b = b / coloredNeighbours.size();
-		if (debug_mode) {
-			a = 1;
-		} else {
-			a = original.alpha();
-		}
+// a = original.alpha();
 
 		return Colors.newColor(a, r, g, b);
 
