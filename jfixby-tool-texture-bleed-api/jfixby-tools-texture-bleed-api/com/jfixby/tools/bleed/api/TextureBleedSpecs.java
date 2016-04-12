@@ -1,3 +1,4 @@
+
 package com.jfixby.tools.bleed.api;
 
 import com.jfixby.cmns.api.file.File;
@@ -6,16 +7,20 @@ public interface TextureBleedSpecs {
 
 	public static final int DEFAULT_PADDING = 16;
 
-	File getInputFolder();
+	File getInputFolder ();
 
-	void setInputFolder(File input_folder);
+	void setInputFolder (File input_folder);
 
-	boolean getDebugMode();
+	boolean getDebugMode ();
 
-	void setDebugMode(boolean flag);
+	void setDebugMode (boolean flag);
 
-	int getPaddingSize();
+	int getPaddingSize ();
 
-	void setPaddingSize(int maxScans);
+	void setPaddingSize (int maxScans);
+
+	void setOutputFolder (File output);
+
+	File getOutputFolder ();
 
 }
