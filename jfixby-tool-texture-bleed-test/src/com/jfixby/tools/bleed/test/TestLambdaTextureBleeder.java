@@ -1,5 +1,5 @@
 
-package com.github.wrebecca.bleed.test;
+package com.jfixby.tools.bleed.test;
 
 import java.io.IOException;
 
@@ -15,21 +15,23 @@ import com.jfixby.tools.bleed.lambda.LambdaTextureBleeder;
 
 public class TestLambdaTextureBleeder {
 
-	public static void main (String[] args) throws IOException {
+	public static void main (final String[] args) throws IOException {
 		DesktopAssembler.setup();
 		TextureBleed.installComponent(new LambdaTextureBleeder());
 		Lambda.installComponent(new RedLambda());
 
-		TextureBleedSpecs bleedSpecs = TextureBleed.newSpecs();
+		final TextureBleedSpecs bleedSpecs = TextureBleed.newSpecs();
 		bleedSpecs.setDebugMode(true);
 		bleedSpecs.setPaddingSize(16);
-		File examples_folder = LocalFileSystem.ApplicationHome().child("examples");
-		File tmp_folder = LocalFileSystem.ApplicationHome().child("tmp");
-		bleedSpecs.setInputFolder(tmp_folder);
+		final File examples_folder = LocalFileSystem.ApplicationHome().child("examples");
+		final File tmp_folder = LocalFileSystem.ApplicationHome().child("lambda");
+		bleedSpecs.setInputFolder(examples_folder);
+		bleedSpecs.setOutputFolder(tmp_folder);
+		tmp_folder.delete();
 
-		LocalFileSystem.copyFolderContentsToFolder(examples_folder, tmp_folder);
+// LocalFileSystem.copyFolderContentsToFolder(examples_folder, tmp_folder);
 
-		TextureBleedResult result = TextureBleed.process(bleedSpecs);
+		final TextureBleedResult result = TextureBleed.process(bleedSpecs);
 		result.print();
 
 	}
