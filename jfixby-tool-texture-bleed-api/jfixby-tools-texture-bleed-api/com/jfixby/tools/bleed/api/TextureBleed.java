@@ -10,7 +10,7 @@ public class TextureBleed {
 	static private ComponentInstaller<TextureBleedComponent> componentInstaller = new ComponentInstaller<TextureBleedComponent>(
 		"TextureBleed");
 
-	public static final void installComponent (TextureBleedComponent component_to_install) {
+	public static final void installComponent (final TextureBleedComponent component_to_install) {
 		componentInstaller.installComponent(component_to_install);
 	}
 
@@ -26,7 +26,7 @@ public class TextureBleed {
 		return invoke().newTextureBleedSpecs();
 	}
 
-	public static TextureBleedResult process (TextureBleedSpecs specs) throws IOException {
+	public static TextureBleedResult process (final TextureBleedSpecs specs) throws IOException {
 		return invoke().process(specs);
 	}
 
