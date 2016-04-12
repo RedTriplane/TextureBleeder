@@ -4,7 +4,7 @@ package com.jfixby.tools.bleed;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
 
-public class TextureBleedSpecsImpl implements TextureBleedSpecs {
+class TextureBleedSpecsImpl implements TextureBleedSpecs {
 	File folder;
 	private boolean debugMode;
 	private int maxScans = -1;
