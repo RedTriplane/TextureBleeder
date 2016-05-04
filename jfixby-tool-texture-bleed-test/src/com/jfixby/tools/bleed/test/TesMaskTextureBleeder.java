@@ -6,7 +6,7 @@ import java.io.IOException;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.file.LocalFileSystem;
 import com.jfixby.cmns.api.lambda.Lambda;
-import com.jfixby.red.desktop.DesktopAssembler;
+import com.jfixby.red.desktop.DesktopSetup;
 import com.jfixby.red.lambda.RedLambda;
 import com.jfixby.tools.bleed.api.TextureBleed;
 import com.jfixby.tools.bleed.api.TextureBleedResult;
@@ -16,7 +16,7 @@ import com.jfixby.tools.bleed.mask.MaskTextureBleeder;
 public class TesMaskTextureBleeder {
 
 	public static void main (final String[] args) throws IOException {
-		DesktopAssembler.setup();
+		DesktopSetup.deploy();
 		TextureBleed.installComponent(new MaskTextureBleeder());
 		Lambda.installComponent(new RedLambda());
 

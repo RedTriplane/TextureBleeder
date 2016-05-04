@@ -6,7 +6,7 @@ import java.io.IOException;
 import com.github.wrebecca.bleed.RebeccaTextureBleeder;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.file.LocalFileSystem;
-import com.jfixby.red.desktop.DesktopAssembler;
+import com.jfixby.red.desktop.DesktopSetup;
 import com.jfixby.tools.bleed.api.TextureBleed;
 import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
@@ -14,7 +14,7 @@ import com.jfixby.tools.bleed.api.TextureBleedSpecs;
 public class TestRebeccaTextureBleeder {
 
 	public static void main (final String[] args) throws IOException {
-		DesktopAssembler.setup();
+		DesktopSetup.deploy();
 		TextureBleed.installComponent(new RebeccaTextureBleeder());
 
 		final TextureBleedSpecs bleedSpecs = TextureBleed.newSpecs();
