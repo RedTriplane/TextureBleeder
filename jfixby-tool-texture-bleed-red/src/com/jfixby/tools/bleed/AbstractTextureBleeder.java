@@ -29,7 +29,7 @@ public abstract class AbstractTextureBleeder implements TextureBleedComponent {
 		final TextureBleedResultImpl result = new TextureBleedResultImpl();
 
 		final File input = specs.getInputFolder();
-		final ChildrenList pngFiles = input.listChildren().filterFiles(n -> {
+		final ChildrenList pngFiles = input.listDirectChildren().filterFiles(n -> {
 			return n.getName().toLowerCase().endsWith(".png");
 		});
 
