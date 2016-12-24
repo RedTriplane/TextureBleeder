@@ -1,9 +1,9 @@
 
 package com.jfixby.tools.bleed.mask;
 
-import com.jfixby.cmns.api.color.Colors;
-import com.jfixby.cmns.api.color.CustomColor;
-import com.jfixby.cmns.api.err.Err;
+import com.jfixby.scarabei.api.color.Colors;
+import com.jfixby.scarabei.api.color.CustomColor;
+import com.jfixby.scarabei.api.err.Err;
 
 class ColorMask {
 	MaskState[] data;

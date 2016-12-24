@@ -3,8 +3,8 @@ package com.jfixby.tools.bleed.mask;
 
 import java.awt.image.BufferedImage;
 
-import com.jfixby.cmns.api.color.Colors;
-import com.jfixby.cmns.api.color.CustomColor;
+import com.jfixby.scarabei.api.color.Colors;
+import com.jfixby.scarabei.api.color.CustomColor;
 
 class MaskBleeder {
 

@@ -3,11 +3,11 @@ package com.jfixby.tools.bleed.test;
 
 import java.io.IOException;
 
-import com.jfixby.cmns.api.desktop.DesktopSetup;
-import com.jfixby.cmns.api.file.File;
-import com.jfixby.cmns.api.file.LocalFileSystem;
 import com.jfixby.cmns.api.lambda.Lambda;
 import com.jfixby.red.lambda.RedLambda;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.file.File;
+import com.jfixby.scarabei.api.file.LocalFileSystem;
 import com.jfixby.tools.bleed.api.TextureBleed;
 import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;

@@ -1,7 +1,7 @@
 
 package com.jfixby.tools.bleed;
 
-import com.jfixby.cmns.api.file.File;
+import com.jfixby.scarabei.api.file.File;
 
 public class FileResult {
 

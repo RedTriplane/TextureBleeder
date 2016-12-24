@@ -3,14 +3,14 @@ package com.jfixby.tools.bleed;
 
 import java.io.IOException;
 
-import com.jfixby.cmns.api.color.Color;
-import com.jfixby.cmns.api.desktop.ImageAWT;
-import com.jfixby.cmns.api.file.ChildrenList;
-import com.jfixby.cmns.api.file.File;
-import com.jfixby.cmns.api.image.ColorMap;
-import com.jfixby.cmns.api.image.ColoredλImage;
-import com.jfixby.cmns.api.image.ImageProcessing;
-import com.jfixby.cmns.api.log.L;
+import com.jfixby.scarabei.api.color.Color;
+import com.jfixby.scarabei.api.desktop.ImageAWT;
+import com.jfixby.scarabei.api.file.ChildrenList;
+import com.jfixby.scarabei.api.file.File;
+import com.jfixby.scarabei.api.image.ColorMap;
+import com.jfixby.scarabei.api.image.ColoredλImage;
+import com.jfixby.scarabei.api.image.ImageProcessing;
+import com.jfixby.scarabei.api.log.L;
 import com.jfixby.tools.bleed.api.TextureBleedComponent;
 import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;

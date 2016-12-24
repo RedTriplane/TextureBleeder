@@ -1,7 +1,7 @@
 
 package com.jfixby.tools.bleed.mask;
 
-import com.jfixby.cmns.api.err.Err;
+import com.jfixby.scarabei.api.err.Err;
 
 class MaskScanner {
 	int index;

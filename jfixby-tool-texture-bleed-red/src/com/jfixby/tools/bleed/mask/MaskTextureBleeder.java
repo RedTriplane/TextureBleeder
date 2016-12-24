@@ -4,9 +4,9 @@ package com.jfixby.tools.bleed.mask;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import com.jfixby.cmns.api.desktop.ImageAWT;
-import com.jfixby.cmns.api.file.File;
-import com.jfixby.cmns.api.log.L;
+import com.jfixby.scarabei.api.desktop.ImageAWT;
+import com.jfixby.scarabei.api.file.File;
+import com.jfixby.scarabei.api.log.L;
 import com.jfixby.tools.bleed.AbstractTextureBleeder;
 import com.jfixby.tools.bleed.FileResult;
 
