@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import com.jfixby.scarabei.api.color.Color;
 import com.jfixby.scarabei.api.desktop.ImageAWT;
-import com.jfixby.scarabei.api.file.ChildrenList;
+import com.jfixby.scarabei.api.file.FilesList;
 import com.jfixby.scarabei.api.file.File;
 import com.jfixby.scarabei.api.image.ColorMap;
 import com.jfixby.scarabei.api.image.ColoredλImage;
@@ -29,7 +29,7 @@ public abstract class AbstractTextureBleeder implements TextureBleedComponent {
 		final TextureBleedResultImpl result = new TextureBleedResultImpl();
 
 		final File input = specs.getInputFolder();
-		final ChildrenList pngFiles = input.listDirectChildren().filterFiles(n -> {
+		final FilesList pngFiles = input.listDirectChildren().filter(n -> {
 			return n.getName().toLowerCase().endsWith(".png");
 		});
 
