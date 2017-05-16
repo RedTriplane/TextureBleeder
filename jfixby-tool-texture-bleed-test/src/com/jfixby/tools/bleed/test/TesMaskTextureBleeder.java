@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import com.jfixby.cmns.api.lambda.Lambda;
 import com.jfixby.red.lambda.RedLambda;
-import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.file.File;
 import com.jfixby.scarabei.api.file.LocalFileSystem;
+import com.jfixby.scarabei.red.desktop.ScarabeiDesktop;
 import com.jfixby.tools.bleed.api.TextureBleed;
 import com.jfixby.tools.bleed.api.TextureBleedResult;
 import com.jfixby.tools.bleed.api.TextureBleedSpecs;
