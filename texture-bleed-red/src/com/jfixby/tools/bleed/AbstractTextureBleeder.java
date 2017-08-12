@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import com.jfixby.scarabei.api.color.Color;
 import com.jfixby.scarabei.api.desktop.ImageAWT;
-import com.jfixby.scarabei.api.file.FilesList;
 import com.jfixby.scarabei.api.file.File;
+import com.jfixby.scarabei.api.file.FilesList;
 import com.jfixby.scarabei.api.image.ColorMap;
 import com.jfixby.scarabei.api.image.ColoredλImage;
 import com.jfixby.scarabei.api.image.ImageProcessing;

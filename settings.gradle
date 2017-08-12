@@ -1,0 +1,3 @@
+include "texture-bleed-api"
+include "texture-bleed-red"
+include "texture-bleed-test"
